@@ -22,6 +22,7 @@ import DashboardIcon from "@material-ui/icons/Dashboard";
 import { SideDrawer } from "./additionalComponents/drawer/sidedrawer";
 
 import Router from "next/router";
+import PrimarySearchAppBar from "./additionalComponents/appbar/customappbar";
 
 const drawerWidth = 260;
 
@@ -35,7 +36,6 @@ const useStyles = makeStyles((theme: Theme) =>
     appBar: {
       width: `calc(100% - ${drawerWidth}px)`,
       marginLeft: drawerWidth,
-      backgroundColor: "#181c20",
       paddingLeft: 20,
     },
     drawer: {
@@ -51,15 +51,13 @@ const useStyles = makeStyles((theme: Theme) =>
     toolbar: theme.mixins.toolbar,
     content: {
       flexGrow: 1,
-      backgroundColor: "#181414",
+      backgroundColor: "#FFFFFF",
       padding: theme.spacing(3),
     },
   })
 );
 
 function Next() {
-  var auth = secureLocalStorage.getItem("credentials") as object;
-
   const classes = useStyles({});
 
   return (
@@ -69,16 +67,11 @@ function Next() {
       </Head>
       <div className={classes.root}>
         <CssBaseline />
-        <AppBar position="fixed" className={classes.appBar}>
-          <Toolbar>
-            <Typography variant="h6" noWrap color="primary">
-              Stuck in the Movie
-            </Typography>
-          </Toolbar>
-        </AppBar>
+        <PrimarySearchAppBar />
         <SideDrawer />
         <main className={classes.content}>
           <div className={classes.toolbar} />
+
           <Typography paragraph>
             Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
             eiusmod tempor incididunt ut labore et dolore magna aliqua. Rhoncus

@@ -1,5 +1,6 @@
 import React from "react";
 import {
+  Box,
   Collapse,
   createStyles,
   Divider,
@@ -22,6 +23,13 @@ import ListIcon from "@material-ui/icons/List";
 import ExpandMore from "@material-ui/icons/ExpandMore";
 import ExpandLess from "@material-ui/icons/ExpandLess";
 import WarningIcon from "@material-ui/icons/Warning";
+import AttachMoneyIcon from "@material-ui/icons/AttachMoney";
+import WorkIcon from "@material-ui/icons/Work";
+import Link from "next/link";
+import PersonIcon from "@material-ui/icons/Person";
+import ExitToAppIcon from "@material-ui/icons/ExitToApp";
+import StorageIcon from "@material-ui/icons/Storage";
+import DescriptionIcon from "@material-ui/icons/Description";
 
 const drawerWidth = 260;
 var auth;
@@ -44,17 +52,18 @@ const useStyles = makeStyles((theme: Theme) =>
     drawer: {
       width: drawerWidth,
       flexShrink: 0,
-      background: "#111416",
+      background: "#F79A1F",
     },
     drawerPaper: {
-      background: "#111416",
+      background: "#e6e6e6",
       width: drawerWidth,
     },
     // necessary for content to be below app bar
     toolbar: theme.mixins.toolbar,
+
     content: {
       flexGrow: 1,
-      backgroundColor: "#181414",
+      backgroundColor: "#f1faee",
       padding: theme.spacing(3),
     },
   })
@@ -75,7 +84,39 @@ function DashboardItem() {
   );
 }
 
-function AdminDrawer() {
+function OperationDrawer(auth) {
+  React.useEffect(() => {
+    if (auth.auth["department"] != "3") {
+      var array = [];
+      array.push({
+        destination: "adminpages/fundrequest",
+        text: "Fund",
+        icon: <AttachMoneyIcon />,
+      });
+
+      setSubItems(array);
+    }
+
+    if (auth.auth["department"] == "3") {
+      var array = [];
+      array.push({
+        destination:
+          "adminpages/accountingnfinancedepartment/managefundrequest",
+        text: "Manage Fund",
+        icon: <AttachMoneyIcon></AttachMoneyIcon>,
+      });
+      setSubItems(array);
+    } else if (auth.auth["department"] == "4") {
+      console.log("Masuk");
+      var array = [];
+      array.push({
+        destination: "adminpages/storagedepartment/manageinventory",
+        text: "Manage Inventory",
+        icon: <StorageIcon />,
+      });
+      setSubItems(array);
+    }
+  }, [auth]);
   const [openCollapse, setOpenCollapse] = React.useState(false);
 
   function handleOpenSettings() {
@@ -84,27 +125,15 @@ function AdminDrawer() {
 
   var mainItems = [
     {
-      destination: "manageemployee",
-      text: "Manage Employee",
-      icon: <PeopleIcon />,
+      destination: "",
+      text: "Operations",
+      icon: <WorkIcon />,
     },
   ];
 
-  var subItems = [
-    {
-      destination: "adminpages/viewemployee",
-      text: "View Employee",
-      icon: <ListIcon />,
-    },
-    {
-      destination: "adminpages/warningletters",
-      text: "Warning Letters",
-      icon: <WarningIcon />,
-    },
-  ];
+  const [subItems, setSubItems] = React.useState([]);
   return (
     <List>
-      <DashboardItem></DashboardItem>
       {mainItems.map((e) => {
         return (
           <ListItem
@@ -142,6 +171,205 @@ function AdminDrawer() {
   );
 }
 
+function SelfServiceDrawer() {
+  const [openCollapse, setOpenCollapse] = React.useState(false);
+
+  function handleOpenSettings() {
+    setOpenCollapse(!openCollapse);
+  }
+
+  var mainItems = [
+    {
+      destination: "",
+      text: "Self Service",
+      icon: <PersonIcon />,
+    },
+  ];
+
+  var subItems = [
+    {
+      destination: "adminpages/personalleave",
+      text: "Personal Leave",
+      icon: <ExitToAppIcon />,
+    },
+  ];
+  return (
+    <List>
+      {mainItems.map((e) => {
+        return (
+          <ListItem
+            button
+            key={e.destination}
+            // {redirect.bind(this, e.destination)}
+            onClick={handleOpenSettings}
+          >
+            <ListItemIcon>{e.icon}</ListItemIcon>
+            <ListItemText>{e.text}</ListItemText>
+            {openCollapse ? <ExpandLess /> : <ExpandMore />}
+          </ListItem>
+        );
+      })}
+      <Collapse in={openCollapse} timeout="auto" unmountOnExit>
+        <List component="div" disablePadding>
+          {subItems.map((e) => {
+            return (
+              <ListItem
+                key={e.destination}
+                onClick={redirect.bind(this, e.destination)}
+                button
+                style={{
+                  paddingLeft: "30px",
+                }}
+              >
+                <ListItemIcon>{e.icon}</ListItemIcon>
+                <ListItemText primary={e.text} />
+              </ListItem>
+            );
+          })}
+        </List>
+      </Collapse>
+    </List>
+  );
+}
+
+function HRDDrawer() {
+  const [openCollapse, setOpenCollapse] = React.useState(false);
+
+  function handleOpenSettings() {
+    setOpenCollapse(!openCollapse);
+  }
+
+  var mainItems = [
+    {
+      destination: "manageemployee",
+      text: "Manage Employee",
+      icon: <PeopleIcon />,
+    },
+  ];
+
+  var subItems = [
+    {
+      destination: "adminpages/humanresourcedepartment/viewemployee",
+      text: "View Employee",
+      icon: <ListIcon />,
+    },
+  ];
+  return (
+    <Box
+    // style={{
+    //   width: "100%",
+    //   height: "100%",
+    //   display: "flex",
+    //   flexDirection: "column",
+    //   justifyContent: "space-between",
+    // }}
+    >
+      <Box style={{}}>
+        <List style={{ padding: 0 }}>
+          {mainItems.map((e) => {
+            return (
+              <ListItem
+                button
+                key={e.destination}
+                // {redirect.bind(this, e.destination)}
+                onClick={handleOpenSettings}
+              >
+                <ListItemIcon>{e.icon}</ListItemIcon>
+                <ListItemText>{e.text}</ListItemText>
+                {openCollapse ? <ExpandLess /> : <ExpandMore />}
+              </ListItem>
+            );
+          })}
+          <Collapse in={openCollapse} timeout="auto" unmountOnExit>
+            <List component="div" disablePadding>
+              {subItems.map((e) => {
+                return (
+                  <ListItem
+                    key={e.destination}
+                    onClick={redirect.bind(this, e.destination)}
+                    button
+                    style={{
+                      paddingLeft: "30px",
+                    }}
+                  >
+                    <ListItemIcon>{e.icon}</ListItemIcon>
+                    <ListItemText primary={e.text} />
+                  </ListItem>
+                );
+              })}
+            </List>
+          </Collapse>
+        </List>
+      </Box>
+    </Box>
+  );
+}
+
+function ManagerDrawer() {
+  const [openCollapse, setOpenCollapse] = React.useState(false);
+
+  function handleOpenSettings() {
+    setOpenCollapse(!openCollapse);
+  }
+
+  var mainItems = [
+    {
+      destination: "managerequests",
+      text: "Manage Requests",
+      icon: <DescriptionIcon />,
+    },
+  ];
+
+  var subItems = [
+    {
+      destination: "adminpages/manager/managewarningletter",
+      text: "Warning Letters",
+      icon: <WarningIcon />,
+    },
+  ];
+  return (
+    <Box>
+      <Box style={{}}>
+        <List style={{ padding: 0 }}>
+          {mainItems.map((e) => {
+            return (
+              <ListItem
+                button
+                key={e.destination}
+                // {redirect.bind(this, e.destination)}
+                onClick={handleOpenSettings}
+              >
+                <ListItemIcon>{e.icon}</ListItemIcon>
+                <ListItemText>{e.text}</ListItemText>
+                {openCollapse ? <ExpandLess /> : <ExpandMore />}
+              </ListItem>
+            );
+          })}
+          <Collapse in={openCollapse} timeout="auto" unmountOnExit>
+            <List component="div" disablePadding>
+              {subItems.map((e) => {
+                return (
+                  <ListItem
+                    key={e.destination}
+                    onClick={redirect.bind(this, e.destination)}
+                    button
+                    style={{
+                      paddingLeft: "30px",
+                    }}
+                  >
+                    <ListItemIcon>{e.icon}</ListItemIcon>
+                    <ListItemText primary={e.text} />
+                  </ListItem>
+                );
+              })}
+            </List>
+          </Collapse>
+        </List>
+      </Box>
+    </Box>
+  );
+}
+
 interface Auth {
   id: string;
   firsName: string;
@@ -151,19 +379,21 @@ interface Auth {
 }
 
 export function SideDrawer() {
-  const [valid, setValid] = React.useState(false);
   const [auth, setAuth] = React.useState(
     secureLocalStorage.getItem("credentials") as Auth
   );
+  const [valid, setValid] = React.useState(false);
 
   React.useEffect(() => {
+    console.log(auth);
     if (auth == null) {
       setAuth(secureLocalStorage.getItem("credentials") as Auth);
     }
-    if (auth != null && auth.department === "2") {
+
+    if (auth != null) {
       setValid(true);
     }
-  }, []);
+  }, [auth]);
 
   const classes = useStyles({});
   return (
@@ -175,10 +405,32 @@ export function SideDrawer() {
       }}
       anchor="left"
     >
-      <div className={classes.toolbar} />
+      <div className={classes.toolbar} style={{ backgroundColor: "#F79A1F" }} />
       <Divider />
-
-      {valid && <AdminDrawer></AdminDrawer>}
+      {valid && (
+        <List style={{ padding: 0, paddingTop: 10 }}>
+          <DashboardItem></DashboardItem>
+          {auth.department != "1" && (
+            <OperationDrawer auth={auth}></OperationDrawer>
+          )}
+        </List>
+      )}
+      {valid && auth.department == "2" && <HRDDrawer></HRDDrawer>}
+      {valid && auth.department == "1" && <ManagerDrawer></ManagerDrawer>}
+      <Box
+        style={{
+          width: "100%",
+          height: "100%",
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "space-between",
+        }}
+      >
+        <Box></Box>
+        <Box>
+          <SelfServiceDrawer />
+        </Box>
+      </Box>
     </Drawer>
   );
 }

@@ -14,7 +14,7 @@ const firebaseConfig = {
   storageBucket: "stuckinthemovie-92038.appspot.com",
   messagingSenderId: "221983168260",
   appId: "1:221983168260:web:1a072d6475958541fe2251",
-  measurementId: "G-JBQX5FFKV3"
+  measurementId: "G-JBQX5FFKV3",
 };
 
 // Initialize Firebase

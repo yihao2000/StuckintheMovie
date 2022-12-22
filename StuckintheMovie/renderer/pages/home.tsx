@@ -15,6 +15,7 @@ import {
   seedEmployee,
   seedDepartments,
   seedDivisions,
+  seedWorkingTime,
 } from "../pages/seeder/seeder";
 import {
   addDoc,
@@ -38,7 +39,7 @@ const useStyles = makeStyles((theme: Theme) =>
     root: {
       textAlign: "center",
       paddingTop: theme.spacing(4),
-      backgroundColor: "#181414",
+      backgroundColor: "#e6e6e6",
       width: "100vw",
       height: "100vh",
     },
@@ -49,8 +50,6 @@ const useStyles = makeStyles((theme: Theme) =>
 
     form: {
       textAlign: "center",
-
-      maxWidth: "40%",
     },
   })
 );
@@ -107,6 +106,7 @@ function Home() {
   //   seedEmployee();
   //   seedDivisions();
   //   seedDepartments();
+  //   seedWorkingTime();
   // }, []);
 
   return (
@@ -124,69 +124,71 @@ function Home() {
         <Box
           className={classes.root}
           display="flex"
-          gridGap={10}
           justifyContent="center"
           alignItems="center"
         >
-          <Grid
-            container
-            direction={"column"}
-            spacing={1}
-            className={classes.form}
+          <Box
+            display="flex"
+            justifyContent="center"
+            alignItems="center"
+            style={{ backgroundColor: "white", borderRadius: 20 }}
           >
-            <Grid item>
-              <Typography
-                className={classes.textStyle}
-                variant="h4"
-                gutterBottom
-              >
-                Stuck in the Movie Management App
-              </Typography>
-            </Grid>
+            <Grid
+              style={{ padding: 70 }}
+              container
+              direction={"column"}
+              spacing={1}
+              className={classes.form}
+            >
+              <Grid item>
+                <Typography
+                  className={classes.textStyle}
+                  variant="h4"
+                  gutterBottom
+                  style={{ color: "#F79A1F", fontFamily: "cursive" }}
+                >
+                  <strong>Stuck in the Movie Management App</strong>
+                </Typography>
+              </Grid>
 
-            <Grid item>
-              <TextField
-                className={classes.textStyle}
-                id="id"
-                name="id"
-                fullWidth={true}
-                // inputProps="blue"
-                disabled={false}
-                label="Username"
-                placeholder="Employee ID"
-                size="medium"
-                variant="outlined"
-              />
-            </Grid>
+              <Grid item>
+                <TextField
+                  className={classes.textStyle}
+                  id="id"
+                  name="id"
+                  fullWidth={true}
+                  // inputProps="blue"
+                  disabled={false}
+                  label="Username"
+                  placeholder="Employee ID"
+                  size="medium"
+                  variant="outlined"
+                />
+              </Grid>
 
-            <Grid item>
-              <TextField
-                className={classes.textStyle}
-                id="password"
-                name="password"
-                fullWidth={true}
-                type="password"
-                // inputProps="blue"
-                disabled={false}
-                label="Password"
-                placeholder="Password"
-                size="medium"
-                variant="outlined"
-              />
-            </Grid>
+              <Grid item>
+                <TextField
+                  className={classes.textStyle}
+                  id="password"
+                  name="password"
+                  fullWidth={true}
+                  type="password"
+                  // inputProps="blue"
+                  disabled={false}
+                  label="Password"
+                  placeholder="Password"
+                  size="medium"
+                  variant="outlined"
+                />
+              </Grid>
 
-            <Grid item>
-              <Button
-                type="submit"
-                variant="contained"
-                style={{
-                  backgroundColor: "#38b4fc",
-                }}
-              >
-                Login
-              </Button>
+              <Grid item>
+                <Button type="submit" variant="contained" color="primary">
+                  Login
+                </Button>
+              </Grid>
             </Grid>
-          </Grid>
+          </Box>
         </Box>
       </form>
     </React.Fragment>

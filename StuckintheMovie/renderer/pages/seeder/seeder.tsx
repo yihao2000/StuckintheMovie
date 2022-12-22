@@ -6,6 +6,108 @@ import { faker } from "@faker-js/faker";
 const coll_employees = collection(database, "employees");
 const coll_divisions = collection(database, "divisions");
 const coll_departments = collection(database, "departments");
+const coll_workingTime = collection(database, "workingtime");
+const coll_workingTimeDetail = collection(database, "workingtimedetail");
+
+export const seedWorkingTime = () => {
+  addDoc(coll_workingTime, {
+    id: "1",
+    workingday: 1,
+    starthour: 7,
+    startminute: 20,
+    endhour: 18,
+    endminute: 20,
+  });
+
+  addDoc(coll_workingTime, {
+    id: "2",
+    workingday: 1,
+    starthour: 9,
+    startminute: 20,
+    endhour: 19,
+    endminute: 20,
+  });
+  addDoc(coll_workingTime, {
+    id: "3",
+    workingday: 2,
+    starthour: 7,
+    startminute: 20,
+    endhour: 18,
+    endminute: 20,
+  });
+  addDoc(coll_workingTime, {
+    id: "4",
+    workingday: 2,
+    starthour: 7,
+    startminute: 20,
+    endhour: 19,
+    endminute: 20,
+  });
+  addDoc(coll_workingTime, {
+    id: "5",
+    workingday: 3,
+    starthour: 7,
+    startminute: 20,
+    endhour: 18,
+    endminute: 20,
+  });
+  addDoc(coll_workingTime, {
+    id: "6",
+    workingday: 3,
+    starthour: 7,
+    startminute: 20,
+    endhour: 19,
+    endminute: 20,
+  });
+  addDoc(coll_workingTime, {
+    id: "7",
+    workingday: 4,
+    starthour: 7,
+    startminute: 20,
+    endhour: 18,
+    endminute: 20,
+  });
+  addDoc(coll_workingTime, {
+    id: "8",
+    workingday: 4,
+    starthour: 9,
+    startminute: 20,
+    endhour: 19,
+    endminute: 20,
+  });
+  addDoc(coll_workingTime, {
+    id: "9",
+    workingday: 5,
+    starthour: 7,
+    startminute: 20,
+    endhour: 18,
+    endminute: 20,
+  });
+  addDoc(coll_workingTime, {
+    id: "10",
+    workingday: 5,
+    starthour: 7,
+    startminute: 20,
+    endhour: 19,
+    endminute: 20,
+  });
+  addDoc(coll_workingTime, {
+    id: "11",
+    workingday: 6,
+    starthour: 8,
+    startminute: 20,
+    endhour: 15,
+    endminute: 20,
+  });
+  addDoc(coll_workingTime, {
+    id: "12",
+    workingday: 6,
+    starthour: 10,
+    startminute: 20,
+    endhour: 17,
+    endminute: 20,
+  });
+};
 
 export const seedDivisions = () => {
   addDoc(coll_divisions, {
@@ -76,6 +178,40 @@ export const seedDepartments = () => {
   });
 };
 
+export const insertWorkingTimeForEmployee = (employeeid: string) => {
+  const mondayShift = Math.floor(Math.random() * 2) + 1 + "";
+  const tuesdayShift = Math.floor(Math.random() * 2) + 3 + "";
+  const wednesdayShift = Math.floor(Math.random() * 2) + 5 + "";
+  const thursdayShift = Math.floor(Math.random() * 2) + 7 + "";
+  const fridayShift = Math.floor(Math.random() * 2) + 9 + "";
+  const saturdayShift = Math.floor(Math.random() * 2) + 11 + "";
+
+  addDoc(coll_workingTimeDetail, {
+    employeeid: employeeid,
+    workingtimeid: mondayShift,
+  });
+  addDoc(coll_workingTimeDetail, {
+    employeeid: employeeid,
+    workingtimeid: tuesdayShift,
+  });
+  addDoc(coll_workingTimeDetail, {
+    employeeid: employeeid,
+    workingtimeid: wednesdayShift,
+  });
+  addDoc(coll_workingTimeDetail, {
+    employeeid: employeeid,
+    workingtimeid: thursdayShift,
+  });
+  addDoc(coll_workingTimeDetail, {
+    employeeid: employeeid,
+    workingtimeid: fridayShift,
+  });
+  addDoc(coll_workingTimeDetail, {
+    employeeid: employeeid,
+    workingtimeid: saturdayShift,
+  });
+};
+
 export const seedEmployee = () => {
   addDoc(coll_employees, {
     id: "200803",
@@ -101,7 +237,7 @@ export const seedEmployee = () => {
   //   department: "2",
   // }).then((v) => console.log(v));
 
-  for (var i = 0; i < 50; i++) {
+  for (var i = 0; i < 10; i++) {
     addDoc(coll_employees, createRandomEmployee(i));
   }
 };
@@ -111,7 +247,7 @@ function pad(num) {
   while (s.length < 3) s = "0" + s;
   return s;
 }
-function createRandomEmployee(i) {
+function createRandomEmployee(i: number) {
   const department = Math.floor(Math.random() * 9) + 1 + "";
   var division = "None";
   if (department == "7") {
@@ -142,6 +278,8 @@ function createRandomEmployee(i) {
   const password = firstName + "!";
   const salary = Math.floor(Math.random() * 2000) + 500;
   const phoneNumber = faker.phone.number("501-###-###");
+
+  insertWorkingTimeForEmployee(id);
 
   return {
     id: id,
