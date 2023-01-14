@@ -20,6 +20,8 @@ import { ClipLoader } from "react-spinners";
 import { Divider } from "@material-ui/core";
 import { Snackbar } from "@material-ui/core";
 import { acceptLeaveRequest, rejectLeaveRequest } from "../../database/query";
+import secureLocalStorage from "react-secure-storage";
+import { LoginCredential } from "../interfaces/interface";
 
 const useStyles = makeStyles({
   root: {
@@ -46,10 +48,18 @@ interface Data {
   id: string;
   leaveRequestMessage: boolean;
   setLeaveRequestMessage: Function;
+  mode: string;
 }
 
 export default function PersonalLeaveCard(props: Data) {
   const classes = useStyles();
+
+  const [auth, setAuth] = React.useState(null);
+
+  React.useEffect(() => {
+    var auth = secureLocalStorage.getItem("credentials") as LoginCredential;
+    setAuth(auth);
+  });
 
   const [openConfirmationDialog, setOpenConfirmationDialog] =
     React.useState(false);
@@ -99,130 +109,141 @@ export default function PersonalLeaveCard(props: Data) {
     }
   };
 
-  return (
-    <Card className={classes.root} style={{ backgroundColor: "#FFFFFF" }}>
-      <CardContent>
-        <Grid container direction={"row"} spacing={2}>
-          <Grid item xs={10}>
-            <Grid item>
-              <Typography
-                className={classes.title}
-                color="textSecondary"
-                gutterBottom
-              >
-                {props.date}
-              </Typography>
+  if (auth) {
+    return (
+      <Card className={classes.root} style={{ backgroundColor: "#FFFFFF" }}>
+        <CardContent>
+          <Grid container direction={"row"} spacing={2}>
+            <Grid item xs={10}>
+              <Grid item>
+                <Typography
+                  className={classes.title}
+                  color="textSecondary"
+                  gutterBottom
+                >
+                  {props.date}
+                </Typography>
+              </Grid>
+              <Grid item>
+                <Typography style={{ fontSize: 18, paddingTop: 0 }}>
+                  {props.reason ? props.reason : " "}
+                </Typography>
+              </Grid>
             </Grid>
-            <Grid item>
-              <Typography style={{ fontSize: 18, paddingTop: 0 }}>
-                {props.reason}
-              </Typography>
-            </Grid>
-          </Grid>
 
-          <Grid item>
-            <Grid item>
-              <Box color={getColor(props.status)}>{props.status}</Box>
-            </Grid>
-            <Grid item>
-              <Box
-                style={{
-                  display: "flex",
-                  justifyContent: "center",
-                }}
-              >
-                {props.status == "Pending" ? (
-                  <Box letterSpacing={2}>
-                    {" "}
-                    <IconButton
-                      onClick={() => {
-                        handleOpenConfirmationDialog("Decline");
+            <Grid item style={{ padding: 0 }}>
+              {auth.department === "2" &&
+              props.mode != "view" &&
+              props.status === "Pending" ? (
+                <Box
+                  style={{
+                    width: "100%",
+                    height: "100%",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    display: "flex",
+                  }}
+                  letterSpacing={3}
+                >
+                  {" "}
+                  <IconButton
+                    onClick={() => {
+                      handleOpenConfirmationDialog("Decline");
+                    }}
+                    className={classes.button}
+                  >
+                    <CloseIcon
+                      fontSize="medium"
+                      style={{
+                        color: "#EB4F47",
                       }}
-                      className={classes.button}
-                    >
-                      <CloseIcon
-                        fontSize="medium"
-                        style={{
-                          color: "#EB4F47",
-                        }}
-                      />
-                    </IconButton>
-                    <IconButton
-                      onClick={() => {
-                        handleOpenConfirmationDialog("Confirm");
-                      }}
-                      className={classes.button}
-                    >
-                      <CheckIcon style={{ color: "green" }} />
-                    </IconButton>
-                  </Box>
-                ) : (
-                  <Box></Box>
-                )}
-              </Box>
+                    />
+                  </IconButton>
+                  <IconButton
+                    onClick={() => {
+                      handleOpenConfirmationDialog("Confirm");
+                    }}
+                    className={classes.button}
+                  >
+                    <CheckIcon style={{ color: "green" }} />
+                  </IconButton>
+                </Box>
+              ) : (
+                <Box
+                  style={{
+                    height: "100%",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    display: "flex",
+                  }}
+                  color={getColor(props.status)}
+                >
+                  {props.status}
+                </Box>
+              )}
             </Grid>
           </Grid>
-        </Grid>
-      </CardContent>
-      <Dialog
-        open={openConfirmationDialog}
-        onClose={handleCloseConfirmationDialog}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
-      >
-        <DialogTitle id="alert-dialog-title">
-          {"Action Confirmation"}
-        </DialogTitle>
-        <Divider style={{ marginLeft: 15, marginRight: 15 }} />
-        <DialogContent>
-          <DialogContentText style={{ color: "black" }}>
-            You are about to{" "}
-            <span style={{ color: status == "Confirm" ? "green" : "red" }}>
-              {status}
-            </span>{" "}
-            selected leave request ! You can't undo this.
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button
-            onClick={updating ? undefined : handleCloseConfirmationDialog}
-            color="primary"
-            style={{
-              cursor: updating ? "not-allowed" : "-moz-grab",
-            }}
-          >
-            Cancel
-          </Button>
-          <Button
-            onClick={updating ? undefined : confirmAction}
-            color="primary"
-            style={{
-              cursor: updating ? "not-allowed" : "-moz-grab",
-            }}
-          >
-            {updating ? (
-              <ClipLoader
-                loading={updating}
-                size={20}
-                color="ffffff"
-                aria-label="Loading Spinner"
-                data-testid="loader"
-              />
-            ) : (
-              "Confirm"
-            )}
-          </Button>
-        </DialogActions>
-      </Dialog>
-      <Snackbar
-        open={props.leaveRequestMessage}
-        autoHideDuration={4000}
-        onClose={handleCloseLeaveRequestMessage}
-      >
-        <Alert onClose={handleCloseLeaveRequestMessage} severity="success">
-          Successfully Update Leave Request Status!
-        </Alert>
-      </Snackbar>
-    </Card>
-  );
+        </CardContent>
+        <Dialog
+          open={openConfirmationDialog}
+          onClose={handleCloseConfirmationDialog}
+          aria-labelledby="alert-dialog-title"
+          aria-describedby="alert-dialog-description"
+        >
+          <DialogTitle id="alert-dialog-title">
+            {"Action Confirmation"}
+          </DialogTitle>
+          <Divider style={{ marginLeft: 15, marginRight: 15 }} />
+          <DialogContent>
+            <DialogContentText style={{ color: "black" }}>
+              You are about to{" "}
+              <span style={{ color: status == "Confirm" ? "green" : "red" }}>
+                {status}
+              </span>{" "}
+              selected leave request ! You can't undo this.
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button
+              onClick={updating ? undefined : handleCloseConfirmationDialog}
+              color="primary"
+              style={{
+                cursor: updating ? "not-allowed" : "-moz-grab",
+              }}
+            >
+              Cancel
+            </Button>
+            <Button
+              onClick={updating ? undefined : confirmAction}
+              color="primary"
+              style={{
+                cursor: updating ? "not-allowed" : "-moz-grab",
+              }}
+            >
+              {updating ? (
+                <ClipLoader
+                  loading={updating}
+                  size={20}
+                  color="ffffff"
+                  aria-label="Loading Spinner"
+                  data-testid="loader"
+                />
+              ) : (
+                "Confirm"
+              )}
+            </Button>
+          </DialogActions>
+        </Dialog>
+        <Snackbar
+          open={props.leaveRequestMessage}
+          autoHideDuration={4000}
+          onClose={handleCloseLeaveRequestMessage}
+        >
+          <Alert onClose={handleCloseLeaveRequestMessage} severity="success">
+            Successfully Update Leave Request Status!
+          </Alert>
+        </Snackbar>
+      </Card>
+    );
+  }
 }

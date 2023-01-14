@@ -257,6 +257,7 @@ export function CustomizedTabs(props: Data) {
                     <TableRow style={{}}>
                       <TableCell style={{ padding: 0 }}>
                         <PersonalLeaveCard
+                          mode="view"
                           date={e.personalleavedate}
                           reason={e.personalleavereason}
                           status={e.status}
@@ -272,6 +273,7 @@ export function CustomizedTabs(props: Data) {
                     <TableRow style={{}}>
                       <TableCell style={{ padding: 0 }}>
                         <PersonalLeaveCard
+                          mode="view"
                           date={e.personalleavedate}
                           reason={e.personalleavereason}
                           status={e.status}
@@ -287,6 +289,7 @@ export function CustomizedTabs(props: Data) {
                     <TableRow style={{}}>
                       <TableCell style={{ padding: 0 }}>
                         <PersonalLeaveCard
+                          mode="view"
                           date={e.personalleavedate}
                           reason={e.personalleavereason}
                           status={e.status}
@@ -302,6 +305,7 @@ export function CustomizedTabs(props: Data) {
                     <TableRow style={{}}>
                       <TableCell style={{ padding: 0 }}>
                         <PersonalLeaveCard
+                          mode="view"
                           date={e.personalleavedate}
                           reason={e.personalleavereason}
                           status={e.status}

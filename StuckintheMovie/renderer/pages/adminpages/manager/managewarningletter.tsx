@@ -69,7 +69,8 @@ import {
   queryAllFundRequest,
   queryAllInventoryPurchase,
 } from "../../database/query";
-import AcceptRejectTable from "../../additionalComponents/tables/acceptrejectfundstable";
+import AcceptRejectTable from "../../additionalComponents/tables/acceptrejecttable";
+import { Interface } from "readline";
 
 const drawerWidth = 260;
 
@@ -222,7 +223,10 @@ export function CustomizedTabs(props: Data) {
         </AntTabs>
 
         {value == 0 && (
-          <AcceptRejectTable setRefresh={props.refreshComponent} />
+          <AcceptRejectTable
+            setRefresh={props.refreshComponent}
+            data={(Data as Interface}
+          />
         )}
 
         {/* {value == 1 && (
