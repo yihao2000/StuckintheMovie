@@ -1,5 +1,0 @@
-Finishing Fitur
-1. Login Bikin Ada Kotak Background
-2. Button merah text putih
-3. Pewarnaan table di view employee 
-4. Validasi2 form
